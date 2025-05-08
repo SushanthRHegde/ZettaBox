@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, LogIn, LogOut, FileText, PenTool, CheckSquare, BookOpen, Settings, Home } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
 import AuthModal from './AuthModal';
@@ -27,12 +27,13 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const isMobile = useIsMobile();
 
   const categories = [
-    { name: 'Dashboard', icon: Home, href: '/' },
-    { name: 'PDF Tools', icon: FileText, href: '/pdf-converter' },
-    { name: 'Web Dev Tools', icon: PenTool, href: '/webdev' },
-    { name: 'Productivity', icon: CheckSquare, href: '/productivity' },
-    { name: 'Study Materials', icon: BookOpen, href: '/study' },
-    { name: 'Utility Tools', icon: Settings, href: '/utility' },
+    
+    { name: 'Dashboard', href: '/' },
+    { name: 'PDF', href: '/pdf-converter' },
+    { name: 'Web Dev', href: '/webdev' },
+    { name: 'Productivity', href: '/productivity' },
+    { name: 'Study', href: '/study' },
+    { name: 'Utility', href: '/utility' },
   ];
 
   const handleOpenAuthModal = (tab: 'login' | 'signup') => {
@@ -50,14 +51,15 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/50">
-        <div className="container flex h-14 items-center px-4 md:px-6">
+      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+        <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
           {/* Sidebar toggle for mobile */}
           {isMobile && (
             <Button
               variant="ghost"
               size="icon"
-              className="mr-2"
+              className="mr-4 hover:bg-accent/50"
               onClick={toggleSidebar}
               aria-label="Toggle sidebar"
             >
@@ -66,25 +68,24 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           )}
           
           {/* Logo */}
-          <div className="flex mr-4">
-            <Link to="/" className="font-bold text-xl text-gradient">ZettaBox</Link>
+          <div className="flex items-center">
+            <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">ZettaBox</Link>
           </div>
           
           {/* Desktop Navigation */}
           {!isMobile && (
-            <nav className="flex-1 flex items-center space-x-1 md:space-x-2 lg:space-x-4">
+            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2 ml-4 lg:ml-8">
               {categories.map((category) => (
                 <Link
                   key={category.name}
                   to={category.href}
                   className={cn(
-                    "flex items-center px-2 py-1.5 text-sm font-medium rounded-md transition-colors",
+                    "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-accent/50",
                     window.location.pathname === category.href
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                      ? "bg-accent text-accent-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <category.icon className="mr-2 h-4 w-4" />
                   {category.name}
                 </Link>
               ))}
@@ -92,16 +93,16 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           )}
           
           {/* User menu */}
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
             {currentUser ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="rounded-full flex items-center gap-2"
+                    className="hover:bg-accent/50 flex items-center gap-2"
                   >
-                    <span className="hidden sm:inline-block font-medium">
+                    <span className="hidden md:inline-block font-medium">
                       {currentUser.email?.split('@')[0]}
                     </span>
                   </Button>
@@ -112,41 +113,40 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                    <LogOut className="h-4 w-4 mr-2" />
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
-                <Button
+                {/* <Button
                   id="login-button"
                   variant="ghost"
                   size="sm"
                   onClick={() => handleOpenAuthModal('login')}
-                  className="hidden sm:flex"
+                  className="hidden sm:flex hover:bg-accent/50"
+                >
+                  Log In
+                </Button> */}
+                <Button
+                  size="sm"
+                  onClick={() => handleOpenAuthModal('login')}
+                  className="hidden sm:flex bg-primary hover:bg-primary/90"
                 >
                   Log In
                 </Button>
                 <Button
-                  size="sm"
-                  onClick={() => handleOpenAuthModal('signup')}
-                  className="hidden sm:flex"
-                >
-                  Sign Up
-                </Button>
-                <Button
                   variant="ghost"
-                  size="icon"
-                  className="sm:hidden rounded-full"
+                  size="sm"
+                  className="sm:hidden"
                   onClick={() => handleOpenAuthModal('login')}
                 >
-                  <LogIn className="h-5 w-5" />
-                  <span className="sr-only">Log in</span>
+                  Log in
                 </Button>
               </>
             )}
           </div>
+        </div>
         </div>
       </header>
       <AuthModal

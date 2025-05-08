@@ -26,8 +26,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
         )}
         
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
-          {children}
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
