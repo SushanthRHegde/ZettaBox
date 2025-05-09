@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
   auth, 
@@ -7,7 +6,8 @@ import {
   signOut,
   onAuthStateChanged,
   googleProvider,
-  signInWithPopup
+  signInWithPopup,
+  updateProfile
 } from '../lib/firebase';
 import { User } from 'firebase/auth';
 import { toast } from "@/components/ui/sonner";
@@ -19,6 +19,7 @@ interface AuthContextProps {
   logIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  updateUserProfile: (displayName: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -44,7 +45,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return unsubscribe;
   }, []);
 
-  // Sign up with email and password
   const signUp = async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -55,7 +55,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Log in with email and password
   const logIn = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -66,7 +65,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Sign in with Google
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -77,7 +75,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Log out
   const logout = async () => {
     try {
       await signOut(auth);
@@ -88,13 +85,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateUserProfile = async (displayName: string) => {
+    if (!currentUser) {
+      toast.error("No user is currently signed in");
+      return;
+    }
+    try {
+      await updateProfile(currentUser, { displayName });
+      // Trigger a re-render with the new user data
+      setCurrentUser(auth.currentUser);
+      toast.success("Profile updated successfully!");
+    } catch (error: any) {
+      toast.error(`Failed to update profile: ${error.message}`);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     isLoading,
     signUp,
     logIn,
     signInWithGoogle,
-    logout
+    logout,
+    updateUserProfile
   };
 
   return (

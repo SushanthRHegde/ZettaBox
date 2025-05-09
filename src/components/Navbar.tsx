@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
 import AuthModal from './AuthModal';
 import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   DropdownMenu,
@@ -25,6 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const { currentUser, logout } = useAuth();
   const isMobile = useIsMobile();
+  const location = useLocation();
 
   const categories = [
     
@@ -81,7 +82,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                   to={category.href}
                   className={cn(
                     "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-primary/10 hover:text-primary",
-                    window.location.pathname === category.href
+                    location.pathname === category.href
                       ? "bg-primary/10 text-primary font-semibold"
                       : "text-muted-foreground"
                   )}
@@ -102,14 +103,15 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                     size="sm"
                     className="hover:bg-accent/50 flex items-center gap-2"
                   >
+                    <User className="h-5 w-5" />
                     <span className="hidden md:inline-block font-medium">
-                      {currentUser.email?.split('@')[0]}
+                      {currentUser.displayName || currentUser.email?.split('@')[0]}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="truncate">
-                    {currentUser.email}
+                    {currentUser.displayName || currentUser.email}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -122,7 +124,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               </DropdownMenu>
             ) : (
               <>
-                {/* <Button
+                <Button
                   id="login-button"
                   variant="ghost"
                   size="sm"
@@ -130,14 +132,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                   className="hidden sm:flex hover:bg-accent/50"
                 >
                   Log In
-                </Button> */}
-                <Button
+                </Button>
+                {/* <Button
                   size="sm"
                   onClick={() => handleOpenAuthModal('login')}
                   className="hidden sm:flex bg-primary hover:bg-primary/90"
                 >
                   Log In
-                </Button>
+                </Button> */}
                 <Button
                   variant="ghost"
                   size="sm"

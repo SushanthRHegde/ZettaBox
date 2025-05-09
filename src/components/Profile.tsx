@@ -1,27 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toast } from './ui/sonner';
-import { updateProfile } from 'firebase/auth';
 
 const Profile = () => {
-  const { currentUser } = useAuth();
-  const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
+  const { currentUser, updateUserProfile } = useAuth();
+  const [displayName, setDisplayName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Update displayName when currentUser changes
+  useEffect(() => {
+    if (currentUser?.displayName) {
+      setDisplayName(currentUser.displayName);
+    }
+  }, [currentUser]);
+
   const handleUpdateProfile = async () => {
-    if (!currentUser) return;
+    if (!currentUser) {
+      toast.error("You must be logged in to update your profile");
+      return;
+    }
     
+    if (!displayName.trim()) {
+      toast.error("Display name cannot be empty");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await updateProfile(currentUser, {
-        displayName: displayName
-      });
+      await updateUserProfile(displayName.trim());
       setIsEditing(false);
-      toast.success('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
     } catch (error: any) {
       toast.error(`Failed to update profile: ${error.message}`);
     } finally {
@@ -56,12 +68,13 @@ const Profile = () => {
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Enter your name"
                 className="max-w-sm"
+                disabled={isLoading}
               />
               <Button
                 onClick={handleUpdateProfile}
                 disabled={isLoading}
               >
-                Save
+                {isLoading ? 'Saving...' : 'Save'}
               </Button>
               <Button
                 variant="ghost"

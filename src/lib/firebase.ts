@@ -10,7 +10,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  User
+  User,
+  updateProfile
 } from "firebase/auth";
 
 // Your web app's Firebase configuration
@@ -38,5 +39,6 @@ export {
   signOut,
   onAuthStateChanged,
   googleProvider,
-  signInWithPopup
+  signInWithPopup,
+  updateProfile
 };
