@@ -55,21 +55,11 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
         <div className="max-w-6xl mx-auto flex h-16 items-center px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-4 flex-1">
-          {/* Sidebar toggle for mobile */}
-          {isMobile && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mr-4 hover:bg-accent/50"
-              onClick={toggleSidebar}
-              aria-label="Toggle sidebar"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-          )}
-          
+          {/* User menu */}
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
+
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0">
+          <div className="flex items-center flex-shrink-0 ml-4">
             <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">ZettaBox</Link>
           </div>
           
@@ -92,9 +82,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               ))}
             </nav>
           )}
-          
-          {/* User menu */}
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
             {currentUser ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

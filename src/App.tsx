@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
 import Profile from "./components/Profile";
+// import MobileNav from "./components/MobileNav";
+import FloatingDock from "./components/FloatingDock";
 
 const queryClient = new QueryClient();
 
@@ -27,10 +29,15 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/pdf-converter" element={<PDFConverter />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/webdev" element={<NotFound />} />
+                  <Route path="/productivity" element={<NotFound />} />
+                  <Route path="/study" element={<NotFound />} />
+                  <Route path="/utility" element={<NotFound />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
+              <FloatingDock />
             </BrowserRouter>
           </div>
         </div>
