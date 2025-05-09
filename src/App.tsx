@@ -10,6 +10,7 @@ import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
 import Profile from "./components/Profile";
 import PDF from "./pages/PDF";
+import WebDev from "./pages/WebDev";
 // import MobileNav from "./components/MobileNav";
 import FloatingDock from "./components/FloatingDock";
 
@@ -30,7 +31,7 @@ const App = () => (
                   <Route path="/pdf" element={<PDF />} />
                   {/* <Route path="/pdf-converter" element={<PDFConverter />} /> */}
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/webdev" element={<NotFound />} />
+                  <Route path="/webdev" element={<WebDev />} />
                   <Route path="/productivity" element={<NotFound />} />
                   <Route path="/study" element={<NotFound />} />
                   <Route path="/utility" element={<NotFound />} />
