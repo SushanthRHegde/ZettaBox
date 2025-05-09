@@ -15,6 +15,11 @@ import Productivity from "./pages/Productivity";
 import TodoList from "./components/Todo";
 import PomodoroTimer from "./components/PomodoroTimer";
 import TaskScheduler from "./components/TaskScheduler";
+import UtilityPage from "./pages/UtilityPage";
+import CurrencyConverter from "./pages/utility/CurrencyConverter";
+import UnitConverter from "./pages/utility/UnitConverter";
+import PasswordGenerator from "./pages/utility/PasswordGenerator";
+import QRCode from "./pages/utility/QRCode";
 // import MobileNav from "./components/MobileNav";
 import FloatingDock from "./components/FloatingDock";
 
@@ -41,7 +46,11 @@ const App = () => (
                   <Route path="/pomodoro" element={<PomodoroTimer />} />
                   <Route path="/scheduler" element={<TaskScheduler />} />
                   <Route path="/study" element={<NotFound />} />
-                  <Route path="/utility" element={<NotFound />} />
+                  <Route path="/utility" element={<UtilityPage />} />
+                  <Route path="/utility/currency-converter" element={<CurrencyConverter />} />
+                  <Route path="/utility/unit-converter" element={<UnitConverter />} />
+                  <Route path="/utility/password-generator" element={<PasswordGenerator />} />
+                  <Route path="/utility/qr-code" element={<QRCode />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Route>
