@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Menu, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -28,7 +27,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const location = useLocation();
 
   const categories = [
-    
     { name: 'Dashboard', href: '/' },
     { name: 'PDF', href: '/pdf-converter' },
     { name: 'Web Dev', href: '/webdev' },
@@ -54,18 +52,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     <>
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
         <div className="max-w-6xl mx-auto flex h-16 items-center px-4 md:px-6 lg:px-8">
-          <div className="flex items-center gap-4 flex-1">
-          {/* User menu */}
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
-
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0 ml-4">
+          <div className="flex items-center flex-shrink-0">
             <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">ZettaBox</Link>
           </div>
           
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Now takes the middle space */}
           {!isMobile && (
-            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 lg:ml-10">
+            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 lg:ml-10 flex-1 justify-center">
               {categories.map((category) => (
                 <Link
                   key={category.name}
@@ -82,6 +76,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               ))}
             </nav>
           )}
+
+          {/* User menu - Now at the right extreme */}
+          <div className="ml-auto">
             {currentUser ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -120,13 +117,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 >
                   Log In
                 </Button>
-                {/* <Button
-                  size="sm"
-                  onClick={() => handleOpenAuthModal('login')}
-                  className="hidden sm:flex bg-primary hover:bg-primary/90"
-                >
-                  Log In
-                </Button> */}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -138,7 +128,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               </>
             )}
           </div>
-        </div>
         </div>
       </header>
       <AuthModal
