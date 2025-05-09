@@ -6,7 +6,7 @@ import { Home, FileText, PenTool, CheckSquare, BookOpen, Settings } from 'lucide
 const FloatingDock = () => {
   const categories = [
     { name: 'Dashboard', icon: Home, href: '/' },
-    { name: 'PDF Tools', icon: FileText, href: '/pdf-converter' },
+    { name: 'PDF Tools', icon: FileText, href: '/pdf' },
     { name: 'Web Dev Tools', icon: PenTool, href: '/webdev' },
     { name: 'Productivity', icon: CheckSquare, href: '/productivity' },
     { name: 'Study Materials', icon: BookOpen, href: '/study' },

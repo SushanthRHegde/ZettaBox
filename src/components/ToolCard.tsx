@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
@@ -9,6 +8,8 @@ interface ToolCardProps {
   description: string;
   href: string;
   isLocked?: boolean;
+  isComingSoon?: boolean;
+  onLockedClick?: () => void;
 }
 
 const ToolCard: React.FC<ToolCardProps> = ({
@@ -17,14 +18,27 @@ const ToolCard: React.FC<ToolCardProps> = ({
   description,
   href,
   isLocked = false,
+  isComingSoon = false,
+  onLockedClick,
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (isLocked && onLockedClick) {
+      e.preventDefault();
+      onLockedClick();
+    }
+    if (isComingSoon) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <a
       href={href}
+      onClick={handleClick}
       className={cn(
         "relative flex flex-col rounded-lg border border-border p-5 transition-colors hover:bg-accent/50",
         "group backdrop-blur-sm",
-        isLocked ? "opacity-80 hover:cursor-not-allowed" : "hover:cursor-pointer"
+        (isLocked || isComingSoon) ? "opacity-80" : "hover:cursor-pointer"
       )}
     >
       <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card group-hover:border-primary/50">
@@ -38,8 +52,28 @@ const ToolCard: React.FC<ToolCardProps> = ({
         <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-card/80 backdrop-blur">
           <div className="text-center">
             <p className="text-sm font-medium">Sign in to unlock</p>
-            <button className="mt-2 text-xs px-3 py-1 rounded bg-primary text-primary-foreground">
+            <button 
+              className="mt-2 text-xs px-3 py-1 rounded bg-primary text-primary-foreground"
+              onClick={(e) => {
+                e.preventDefault();
+                onLockedClick?.();
+              }}
+            >
               Login
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isComingSoon && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-card/80 backdrop-blur">
+          <div className="text-center">
+            <p className="text-sm font-medium">Coming Soon</p>
+            <button 
+              className="mt-2 text-xs px-3 py-1 rounded bg-primary text-primary-foreground"
+              disabled
+            >
+              Stay Tuned
             </button>
           </div>
         </div>

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +9,7 @@ import Index from "./pages/Index";
 import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
 import Profile from "./components/Profile";
+import PDF from "./pages/PDF";
 // import MobileNav from "./components/MobileNav";
 import FloatingDock from "./components/FloatingDock";
 
@@ -27,7 +27,8 @@ const App = () => (
               <Routes>
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Index />} />
-                  <Route path="/pdf-converter" element={<PDFConverter />} />
+                  <Route path="/pdf" element={<PDF />} />
+                  {/* <Route path="/pdf-converter" element={<PDFConverter />} /> */}
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/webdev" element={<NotFound />} />
                   <Route path="/productivity" element={<NotFound />} />

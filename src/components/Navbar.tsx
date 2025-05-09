@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
   const categories = [
     { name: 'Home', href: '/' },
-    { name: 'PDF', href: '/pdf-converter' },
+    { name: 'PDF', href: '/pdf' },
     { name: 'Web Dev', href: '/webdev' },
     { name: 'Productivity', href: '/productivity' },
     { name: 'Study', href: '/study' },
