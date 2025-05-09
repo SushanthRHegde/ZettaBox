@@ -84,98 +84,100 @@ const PasswordGenerator = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
       {/* Header Section */}
-      <header className="space-y-3 sm:space-y-4">
-        <h1 className="text-3xl sm:text-4xl font-bold">Password Tools</h1>
-        <p className="text-lg sm:text-xl text-muted-foreground">
-          Generate secure passwords with customizable options
-        </p>
-      </header>
+      <div className="max-w-2xl mx-auto">
+        <header className="space-y-3 sm:space-y-4">
+          <h1 className="text-3xl sm:text-4xl font-bold">Password Tools</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground">
+            Generate secure passwords with customizable options
+          </p>
+        </header>
 
-      {/* Main Tools Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
-            <Key className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            Password Generator
-          </h2>
-        </div>
+        {/* Main Tools Section */}
+        <section>
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+              <Key className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              Password Generator
+            </h2>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Generate Password</CardTitle>
-            <CardDescription>Customize your password requirements</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <Input
-                  value={password}
-                  readOnly
-                  className="font-mono"
-                  placeholder="Generated password"
-                />
-                <Button variant="outline" size="icon" onClick={copyToClipboard}>
-                  <Copy className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="icon" onClick={generatePassword}>
-                  <RefreshCw className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label>Password Length: {length}</Label>
-                </div>
-                <Slider
-                  value={[length]}
-                  onValueChange={(value) => setLength(value[0])}
-                  min={8}
-                  max={32}
-                  step={1}
-                />
-              </div>
-
+          <Card>
+            <CardHeader>
+              <CardTitle>Generate Password</CardTitle>
+              <CardDescription>Customize your password requirements</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="uppercase">Include Uppercase Letters</Label>
-                  <Switch
-                    id="uppercase"
-                    checked={includeUppercase}
-                    onCheckedChange={setIncludeUppercase}
+                <div className="flex items-center space-x-4">
+                  <Input
+                    value={password}
+                    readOnly
+                    className="font-mono"
+                    placeholder="Generated password"
+                  />
+                  <Button variant="outline" size="icon" onClick={copyToClipboard}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={generatePassword}>
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label>Password Length: {length}</Label>
+                  </div>
+                  <Slider
+                    value={[length]}
+                    onValueChange={(value) => setLength(value[0])}
+                    min={8}
+                    max={32}
+                    step={1}
                   />
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="lowercase">Include Lowercase Letters</Label>
-                  <Switch
-                    id="lowercase"
-                    checked={includeLowercase}
-                    onCheckedChange={setIncludeLowercase}
-                  />
-                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="uppercase">Include Uppercase Letters</Label>
+                    <Switch
+                      id="uppercase"
+                      checked={includeUppercase}
+                      onCheckedChange={setIncludeUppercase}
+                    />
+                  </div>
 
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="numbers">Include Numbers</Label>
-                  <Switch
-                    id="numbers"
-                    checked={includeNumbers}
-                    onCheckedChange={setIncludeNumbers}
-                  />
-                </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="lowercase">Include Lowercase Letters</Label>
+                    <Switch
+                      id="lowercase"
+                      checked={includeLowercase}
+                      onCheckedChange={setIncludeLowercase}
+                    />
+                  </div>
 
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="symbols">Include Symbols</Label>
-                  <Switch
-                    id="symbols"
-                    checked={includeSymbols}
-                    onCheckedChange={setIncludeSymbols}
-                  />
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="numbers">Include Numbers</Label>
+                    <Switch
+                      id="numbers"
+                      checked={includeNumbers}
+                      onCheckedChange={setIncludeNumbers}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="symbols">Include Symbols</Label>
+                    <Switch
+                      id="symbols"
+                      checked={includeSymbols}
+                      onCheckedChange={setIncludeSymbols}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+            </CardContent>
+          </Card>
+        </section>
+      </div>
     </div>
   );
 };

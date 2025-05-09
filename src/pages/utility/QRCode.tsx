@@ -146,154 +146,156 @@ const QRCode = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
       {/* Header Section */}
-      <header className="space-y-3 sm:space-y-4">
-        <h1 className="text-3xl sm:text-4xl font-bold">QR Code Tools</h1>
-        <p className="text-lg sm:text-xl text-muted-foreground">
-          Generate and scan QR codes for various purposes
-        </p>
-      </header>
+      <div className="max-w-2xl mx-auto">
+        <header className="space-y-3 sm:space-y-4">
+          <h1 className="text-3xl sm:text-4xl font-bold">QR Code Tools</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground">
+            Generate and scan QR codes for various purposes
+          </p>
+        </header>
 
-      {/* Main Tools Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
-            <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            QR Code Generator & Scanner
-          </h2>
-        </div>
+        {/* Main Tools Section */}
+        <section>
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+              <QrCode className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              QR Code Generator & Scanner
+            </h2>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>QR Code Tools</CardTitle>
-            <CardDescription>Generate or scan QR codes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="generate">Generate</TabsTrigger>
-                <TabsTrigger value="scan">Scan</TabsTrigger>
-              </TabsList>
+          <Card>
+            <CardHeader>
+              <CardTitle>QR Code Tools</CardTitle>
+              <CardDescription>Generate or scan QR codes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="generate">Generate</TabsTrigger>
+                  <TabsTrigger value="scan">Scan</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="generate" className="space-y-4">
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label>Content Type</Label>
-                    <TabsList className="grid w-full grid-cols-4">
-                      <TabsTrigger
-                        value="text"
-                        onClick={() => setQrType('text')}
-                        className={qrType === 'text' ? 'bg-primary text-primary-foreground' : ''}
-                      >
-                        Text
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="url"
-                        onClick={() => setQrType('url')}
-                        className={qrType === 'url' ? 'bg-primary text-primary-foreground' : ''}
-                      >
-                        URL
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="email"
-                        onClick={() => setQrType('email')}
-                        className={qrType === 'email' ? 'bg-primary text-primary-foreground' : ''}
-                      >
-                        Email
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="phone"
-                        onClick={() => setQrType('phone')}
-                        className={qrType === 'phone' ? 'bg-primary text-primary-foreground' : ''}
-                      >
-                        Phone
-                      </TabsTrigger>
-                    </TabsList>
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label>Content</Label>
-                    <div className="flex gap-2">
-                      {typeIcons[qrType] && (
-                        <div className="flex items-center justify-center w-10 h-10 border rounded-md">
-                          {typeIcons[qrType]}
-                        </div>
-                      )}
-                      <Input
-                        value={qrContent}
-                        onChange={(e) => setQrContent(e.target.value)}
-                        placeholder={`Enter ${qrType}...`}
-                        className="flex-1"
-                      />
+                <TabsContent value="generate" className="space-y-4">
+                  <div className="grid gap-4">
+                    <div className="grid gap-2">
+                      <Label>Content Type</Label>
+                      <TabsList className="grid w-full grid-cols-4">
+                        <TabsTrigger
+                          value="text"
+                          onClick={() => setQrType('text')}
+                          className={qrType === 'text' ? 'bg-primary text-primary-foreground' : ''}
+                        >
+                          Text
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="url"
+                          onClick={() => setQrType('url')}
+                          className={qrType === 'url' ? 'bg-primary text-primary-foreground' : ''}
+                        >
+                          URL
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="email"
+                          onClick={() => setQrType('email')}
+                          className={qrType === 'email' ? 'bg-primary text-primary-foreground' : ''}
+                        >
+                          Email
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="phone"
+                          onClick={() => setQrType('phone')}
+                          className={qrType === 'phone' ? 'bg-primary text-primary-foreground' : ''}
+                        >
+                          Phone
+                        </TabsTrigger>
+                      </TabsList>
                     </div>
-                  </div>
 
-                  {qrContent && (
-                    <div className="flex flex-col items-center gap-4 pt-4">
-                      <div ref={qrRef} className="p-4 bg-white rounded-lg">
-                        <QRCodeCanvas
-                          value={generateQRContent()}
-                          size={200}
-                          level="H"
-                          includeMargin
+                    <div className="grid gap-2">
+                      <Label>Content</Label>
+                      <div className="flex gap-2">
+                        {typeIcons[qrType] && (
+                          <div className="flex items-center justify-center w-10 h-10 border rounded-md">
+                            {typeIcons[qrType]}
+                          </div>
+                        )}
+                        <Input
+                          value={qrContent}
+                          onChange={(e) => setQrContent(e.target.value)}
+                          placeholder={`Enter ${qrType}...`}
+                          className="flex-1"
                         />
                       </div>
-                      <Button onClick={downloadQRCode}>
-                        <Download className="h-4 w-4 mr-2" />
-                        Download QR Code
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="scan" className="space-y-4">
-                <div className="grid gap-4">
-                  <div className="grid gap-4">
-                    <div className="flex justify-center gap-4">
-                      <Button onClick={startScanning} disabled={isScanning}>
-                        <Camera className="h-4 w-4 mr-2" />
-                        {isScanning ? 'Scanning...' : 'Start Camera'}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Upload Image
-                      </Button>
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileUpload}
-                        accept="image/*"
-                        className="hidden"
-                      />
                     </div>
 
-                    {isScanning && (
-                      <div className="aspect-video relative rounded-lg overflow-hidden bg-black">
-                        <video ref={videoRef} className="w-full h-full object-cover" />
-                      </div>
-                    )}
-
-                    {scannedResult && (
-                      <div className="space-y-2">
-                        <Label>Scanned Content</Label>
-                        <div className="flex gap-2">
-                          <Input value={scannedResult} readOnly />
-                          <Button variant="outline" size="icon" onClick={copyToClipboard}>
-                            <Copy className="h-4 w-4" />
-                          </Button>
+                    {qrContent && (
+                      <div className="flex flex-col items-center gap-4 pt-4">
+                        <div ref={qrRef} className="p-4 bg-white rounded-lg">
+                          <QRCodeCanvas
+                            value={generateQRContent()}
+                            size={200}
+                            level="H"
+                            includeMargin
+                          />
                         </div>
+                        <Button onClick={downloadQRCode}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Download QR Code
+                        </Button>
                       </div>
                     )}
                   </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </section>
+                </TabsContent>
+
+                <TabsContent value="scan" className="space-y-4">
+                  <div className="grid gap-4">
+                    <div className="grid gap-4">
+                      <div className="flex justify-center gap-4">
+                        <Button onClick={startScanning} disabled={isScanning}>
+                          <Camera className="h-4 w-4 mr-2" />
+                          {isScanning ? 'Scanning...' : 'Start Camera'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload Image
+                        </Button>
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleFileUpload}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                      </div>
+
+                      {isScanning && (
+                        <div className="aspect-video relative rounded-lg overflow-hidden bg-black">
+                          <video ref={videoRef} className="w-full h-full object-cover" />
+                        </div>
+                      )}
+
+                      {scannedResult && (
+                        <div className="space-y-2">
+                          <Label>Scanned Content</Label>
+                          <div className="flex gap-2">
+                            <Input value={scannedResult} readOnly />
+                            <Button variant="outline" size="icon" onClick={copyToClipboard}>
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </section>
+      </div>
     </div>
   );
 };

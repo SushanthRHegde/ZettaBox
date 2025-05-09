@@ -108,111 +108,113 @@ const UnitConverter = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
       {/* Header Section */}
-      <header className="space-y-3 sm:space-y-4">
-        <h1 className="text-3xl sm:text-4xl font-bold">Unit Tools</h1>
-        <p className="text-lg sm:text-xl text-muted-foreground">
-          Convert between different units of measurement
-        </p>
-      </header>
+      <div className="max-w-2xl mx-auto">
+        <header className="space-y-3 sm:space-y-4">
+          <h1 className="text-3xl sm:text-4xl font-bold">Unit Tools</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground">
+            Convert between different units of measurement
+          </p>
+        </header>
 
-      {/* Main Tools Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
-            <Ruler className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            Unit Converter
-          </h2>
-        </div>
+        {/* Main Tools Section */}
+        <section>
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+              <Ruler className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              Unit Converter
+            </h2>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Convert Units</CardTitle>
-            <CardDescription>Select unit type and enter value to convert</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Tabs value={unitType} onValueChange={(v) => setUnitType(v as keyof typeof unitTypes)}>
-              <TabsList className="grid w-full grid-cols-3">
-                {Object.entries(unitTypes).map(([key, { name }]) => (
-                  <TabsTrigger key={key} value={key}>
-                    {name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+          <Card>
+            <CardHeader>
+              <CardTitle>Convert Units</CardTitle>
+              <CardDescription>Select unit type and enter value to convert</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Tabs value={unitType} onValueChange={(v) => setUnitType(v as keyof typeof unitTypes)}>
+                <TabsList className="grid w-full grid-cols-3">
+                  {Object.entries(unitTypes).map(([key, { name }]) => (
+                    <TabsTrigger key={key} value={key}>
+                      {name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
 
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <label htmlFor="value" className="text-sm font-medium">
-                  Value
-                </label>
-                <Input
-                  id="value"
-                  type="number"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  placeholder="Enter value"
-                />
-              </div>
-
-              <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-end">
+              <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium">From</label>
-                  <Select value={fromUnit} onValueChange={setFromUnit}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(unitTypes[unitType].units).map(([key, { name }]) => (
-                        <SelectItem key={key} value={key}>
-                          {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <label htmlFor="value" className="text-sm font-medium">
+                    Value
+                  </label>
+                  <Input
+                    id="value"
+                    type="number"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    placeholder="Enter value"
+                  />
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSwapUnits}
-                  className="mb-1"
-                >
-                  <ArrowLeftRight className="h-4 w-4" />
-                </Button>
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-end">
+                  <div className="grid gap-2">
+                    <label className="text-sm font-medium">From</label>
+                    <Select value={fromUnit} onValueChange={setFromUnit}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select unit" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(unitTypes[unitType].units).map(([key, { name }]) => (
+                          <SelectItem key={key} value={key}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">To</label>
-                  <Select value={toUnit} onValueChange={setToUnit}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(unitTypes[unitType].units).map(([key, { name }]) => (
-                        <SelectItem key={key} value={key}>
-                          {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleSwapUnits}
+                    className="mb-1"
+                  >
+                    <ArrowLeftRight className="h-4 w-4" />
+                  </Button>
+
+                  <div className="grid gap-2">
+                    <label className="text-sm font-medium">To</label>
+                    <Select value={toUnit} onValueChange={setToUnit}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select unit" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(unitTypes[unitType].units).map(([key, { name }]) => (
+                          <SelectItem key={key} value={key}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {result !== null && (
-              <div className="pt-4 border-t">
-                <div className="text-2xl font-bold">
-                  {parseFloat(value).toLocaleString()} {unitTypes[unitType].units[fromUnit].name} ={' '}
-                  {result.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 4,
-                  })}{' '}
-                  {unitTypes[unitType].units[toUnit].name}
+              {result !== null && (
+                <div className="pt-4 border-t">
+                  <div className="text-2xl font-bold">
+                    {parseFloat(value).toLocaleString()} {unitTypes[unitType].units[fromUnit].name} ={' '}
+                    {result.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 4,
+                    })}{' '}
+                    {unitTypes[unitType].units[toUnit].name}
+                  </div>
                 </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </section>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+      </div>
     </div>
   );
 };
