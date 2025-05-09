@@ -52,8 +52,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-        <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
+        <div className="max-w-6xl mx-auto flex h-16 items-center px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-4 flex-1">
           {/* Sidebar toggle for mobile */}
           {isMobile && (
             <Button
@@ -68,22 +68,22 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           )}
           
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-shrink-0">
             <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">ZettaBox</Link>
           </div>
           
           {/* Desktop Navigation */}
           {!isMobile && (
-            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2 ml-4 lg:ml-8">
+            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 lg:ml-10">
               {categories.map((category) => (
                 <Link
                   key={category.name}
                   to={category.href}
                   className={cn(
-                    "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-accent/50",
+                    "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-primary/10 hover:text-primary",
                     window.location.pathname === category.href
-                      ? "bg-accent text-accent-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-muted-foreground"
                   )}
                 >
                   {category.name}
@@ -112,6 +112,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                     {currentUser.email}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">Profile</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                     Logout
                   </DropdownMenuItem>

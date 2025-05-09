@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import AppLayout from '@/components/AppLayout';
 import ToolCard from '@/components/ToolCard';
 import CategorySection from '@/components/CategorySection';
 import { useAuth } from '@/context/AuthContext';
@@ -118,8 +117,7 @@ const Index: React.FC = () => {
   }, [currentUser]);
 
   return (
-    <AppLayout>
-      <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
         <header className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome to ZettaBox{currentUser ? `, ${currentUser.email?.split('@')[0]}` : ''}</h1>
           <p className="text-muted-foreground">All your productivity tools in one place</p>
@@ -200,7 +198,6 @@ const Index: React.FC = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 

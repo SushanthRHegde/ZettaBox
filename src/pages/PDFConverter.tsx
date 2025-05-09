@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Upload, FileUp, FileDown, Check, AlertCircle, Trash2 } from 'lucide-react';
-import AppLayout from '@/components/AppLayout';
 import { cn } from '@/lib/utils';
 
 const PDFConverter: React.FC = () => {
@@ -43,8 +42,7 @@ const PDFConverter: React.FC = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto">
         <header className="mb-8">
           <h1 className="text-2xl font-bold mb-2">PDF Converter</h1>
           <p className="text-muted-foreground">Convert files to and from PDF format</p>
@@ -185,7 +183,6 @@ const PDFConverter: React.FC = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 

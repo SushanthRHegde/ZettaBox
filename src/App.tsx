@@ -5,9 +5,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import MainLayout from "./components/MainLayout";
 import Index from "./pages/Index";
 import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
+import Profile from "./components/Profile";
 
 const queryClient = new QueryClient();
 
@@ -20,14 +22,15 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <div className="flex-1">
-                <Routes>
+              <Routes>
+                <Route element={<MainLayout />}>
                   <Route path="/" element={<Index />} />
                   <Route path="/pdf-converter" element={<PDFConverter />} />
+                  <Route path="/profile" element={<Profile />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
-                </Routes>
-              </div>
+                </Route>
+              </Routes>
             </BrowserRouter>
           </div>
         </div>
