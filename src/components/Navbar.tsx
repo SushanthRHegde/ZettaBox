@@ -68,9 +68,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                     key={category.name}
                     to={category.href}
                     className={cn(
-                      "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-primary/10 hover:text-primary",
+                      "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:text-primary",
                       location.pathname === category.href
-                        ? "bg-primary/10 text-primary font-semibold"
+                        ? "text-primary font-semibold"
                         : "text-muted-foreground"
                     )}
                   >
