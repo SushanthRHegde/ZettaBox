@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const location = useLocation();
 
   const categories = [
-    { name: 'Dashboard', href: '/' },
+    { name: 'Home', href: '/' },
     { name: 'PDF', href: '/pdf-converter' },
     { name: 'Web Dev', href: '/webdev' },
     { name: 'Productivity', href: '/productivity' },
@@ -51,83 +51,116 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-        <div className="max-w-6xl mx-auto flex h-16 items-center px-4 md:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0">
-            <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">ZettaBox</Link>
+          <div className="flex-shrink-0">
+            <Link to="/" className="font-bold text-lg sm:text-xl tracking-tight hover:text-primary transition-colors">
+              ZettaBox
+            </Link>
           </div>
-          
-          {/* Desktop Navigation - Now takes the middle space */}
+
+          {/* Desktop Navigation */}
           {!isMobile && (
-            <nav className="hidden md:flex items-center space-x-2 lg:space-x-4 ml-6 lg:ml-10 flex-1 justify-center">
-              {categories.map((category) => (
-                <Link
-                  key={category.name}
-                  to={category.href}
-                  className={cn(
-                    "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-primary/10 hover:text-primary",
-                    location.pathname === category.href
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "text-muted-foreground"
+            <div className="flex-1 flex justify-center">
+              <nav className="hidden md:flex items-center space-x-2 lg:space-x-4">
+                {categories.map((category) => (
+                  <Link
+                    key={category.name}
+                    to={category.href}
+                    className={cn(
+                      "flex items-center px-2 lg:px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-primary/10 hover:text-primary",
+                      location.pathname === category.href
+                        ? "bg-primary/10 text-primary font-semibold"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+
+                {/* User Menu integrated with nav items */}
+                <div className="ml-2">
+                  {currentUser ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="hover:bg-accent/50 flex items-center gap-2"
+                        >
+                          <User className="h-5 w-5" />
+                          <span className="hidden md:inline-block font-medium">
+                            {currentUser.displayName || currentUser.email?.split('@')[0]}
+                          </span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel className="truncate">
+                          {currentUser.displayName || currentUser.email}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link to="/profile">Profile</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleOpenAuthModal('login')}
+                      className="hover:bg-accent/50"
+                    >
+                      Log in
+                    </Button>
                   )}
-                >
-                  {category.name}
-                </Link>
-              ))}
-            </nav>
+                </div>
+              </nav>
+            </div>
           )}
 
-          {/* User menu - Now at the right extreme */}
-          <div className="ml-auto">
-            {currentUser ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="hover:bg-accent/50 flex items-center gap-2"
-                  >
-                    <User className="h-5 w-5" />
-                    <span className="hidden md:inline-block font-medium">
-                      {currentUser.displayName || currentUser.email?.split('@')[0]}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="truncate">
-                    {currentUser.displayName || currentUser.email}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <>
-                <Button
-                  id="login-button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleOpenAuthModal('login')}
-                  className="hidden sm:flex hover:bg-accent/50"
-                >
-                  Log In
-                </Button>
+          {/* Mobile Menu */}
+          {isMobile && (
+            <div className="flex items-center">
+              {currentUser ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="hover:bg-accent/50 flex items-center gap-2"
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel className="truncate">
+                      {currentUser.displayName || currentUser.email}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="sm:hidden"
                   onClick={() => handleOpenAuthModal('login')}
+                  className="hover:bg-accent/50"
                 >
                   Log in
                 </Button>
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
       <AuthModal

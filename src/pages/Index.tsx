@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import ToolCard from '@/components/ToolCard';
 import CategorySection from '@/components/CategorySection';
 import { useAuth } from '@/context/AuthContext';
+import AuthModal from '@/components/AuthModal';
 import { 
   FileText, PenTool, CheckSquare, BookOpen, Settings, Palette, 
   FileImage, Link, Clock, Smile, Compass, Lock, Sparkles 
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 
 const Index: React.FC = () => {
   const { currentUser } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   
   // Mock recently used tools (in a real app, this would come from localStorage or user data)
   const recentTools = [
@@ -133,12 +134,21 @@ const Index: React.FC = () => {
                 <h3 className="font-medium">You're in Guest Mode</h3>
                 <p className="text-sm text-muted-foreground">Sign in to save your tools and preferences</p>
               </div>
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium">
+              <Button 
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium"
+                onClick={() => setIsAuthModalOpen(true)}
+              >
                 Sign In
               </Button>
             </div>
           </div>
         )}
+
+        <AuthModal 
+          isOpen={isAuthModalOpen} 
+          onClose={() => setIsAuthModalOpen(false)}
+          defaultTab="login"
+        />
 
         {/* Recently Used Section */}
         <section className="mb-6">
