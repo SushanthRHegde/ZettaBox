@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Upload, FileUp, FileDown, Check, AlertCircle, Trash2, Download, RefreshCw } from 'lucide-react';
+import { Upload, FileUp, FileDown, Check, AlertCircle, Trash2, Download, RefreshCw, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import PDFMergerLib from 'pdf-merger-js/browser';
 import { useToast } from '@/hooks/use-toast';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const PDFMerger: React.FC = () => {
   const { toast } = useToast();
@@ -51,6 +52,15 @@ const PDFMerger: React.FC = () => {
       URL.revokeObjectURL(mergedPdfUrl);
       setMergedPdfUrl(null);
     }
+  };
+
+  // Handle drag and drop reordering
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+    const items = Array.from(files);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setFiles(items);
   };
 
   // Handle merge operation
@@ -103,19 +113,19 @@ const PDFMerger: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
-      <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center">PDF {mode === 'merge' ? 'Merger' : 'Splitter'}</h1>
-        <p className="text-sm sm:text-base text-muted-foreground text-center max-w-md mx-auto px-4">
+    <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
+      <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4">
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center">PDF {mode === 'merge' ? 'Merger' : 'Splitter'}</h1>
+        <p className="text-xs sm:text-sm md:text-base text-muted-foreground text-center max-w-md mx-auto px-2 sm:px-4">
           {mode === 'merge' ? 'Combine multiple PDF files into one' : 'Split a PDF file into multiple documents'}
         </p>
-
+    
         {/* Mode Toggle */}
-        <div className="flex w-full max-w-xs rounded-lg overflow-hidden border">
+        <div className="flex w-full max-w-[280px] sm:max-w-xs rounded-lg overflow-hidden border">
           <button
             onClick={() => { setMode('merge'); resetState(); }}
             className={cn(
-              'flex-1 px-3 sm:px-4 py-2 text-sm font-medium transition-colors',
+              'flex-1 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors',
               mode === 'merge' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'
             )}
           >
@@ -124,7 +134,7 @@ const PDFMerger: React.FC = () => {
           <button
             onClick={() => { setMode('split'); resetState(); }}
             className={cn(
-              'flex-1 px-3 sm:px-4 py-2 text-sm font-medium transition-colors',
+              'flex-1 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors',
               mode === 'split' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'
             )}
           >
@@ -132,14 +142,14 @@ const PDFMerger: React.FC = () => {
           </button>
         </div>
       </div>
-
+    
       {!success && (
         <>
           {/* File Upload Area */}
           <div
             className={cn(
-              'border-2 border-dashed rounded-lg p-4 sm:p-6',
-              'flex flex-col items-center justify-center space-y-3 sm:space-y-4',
+              'border-2 border-dashed rounded-lg p-3 sm:p-4 md:p-6',
+              'flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4',
               'cursor-pointer hover:border-primary/50 transition-colors'
             )}
             onClick={() => document.getElementById('file-upload')?.click()}
@@ -152,38 +162,75 @@ const PDFMerger: React.FC = () => {
               multiple={mode === 'merge'}
               onChange={handleFileUpload}
             />
-            <Upload className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground" />
+            <Upload className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-muted-foreground" />
             <div className="text-center">
-              <p className="text-sm sm:text-base font-medium">
+              <p className="text-xs sm:text-sm md:text-base font-medium">
                 {mode === 'merge' ? 'Upload PDF files to merge' : 'Upload a PDF file to split'}
               </p>
               <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                Click or drag and drop PDF files
-              </p>
+            Click or drag and drop PDF files
+          </p>
+          {mode === 'merge' && (
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              Use the grip handle to drag and rearrange the order of PDFs for merging
+            </p>
+          )}
+          {mode === 'merge' && files.length > 0 && (
+            <p className="text-xs sm:text-sm text-primary mt-2">
+              ↕️ Drag files to set the order for merging
+            </p>
+          )}
             </div>
           </div>
-
+    
           {/* File List */}
           {files.length > 0 && (
-            <div className="space-y-2">
-              {files.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-2 sm:p-3 bg-accent/50 rounded-lg"
-                >
-                  <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
-                    <FileUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                    <span className="text-sm font-medium truncate">{file.name}</span>
-                  </div>
-                  <button
-                    onClick={() => handleRemoveFile(index)}
-                    className="text-destructive hover:text-destructive/80 transition-colors ml-2 flex-shrink-0"
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="pdf-files">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="space-y-1.5 sm:space-y-2"
                   >
-                    <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
-                  </button>
-                </div>
-              ))}
-            </div>
+                    {files.map((file, index) => (
+                      <Draggable key={index} draggableId={`file-${index}`} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className="flex items-center justify-between p-1.5 sm:p-2 md:p-3 bg-accent/50 rounded-lg group hover:bg-accent/70 transition-colors"
+                          >
+                            <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 flex-1 min-w-0">
+                              <div
+                                {...provided.dragHandleProps}
+                                className="p-0.5 sm:p-1 rounded hover:bg-accent/80 cursor-grab active:cursor-grabbing"
+                              >
+                                <GripVertical className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-muted-foreground" />
+                              </div>
+                              <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 min-w-0">
+                                <span className="text-xs sm:text-sm font-medium text-primary shrink-0">{index + 1}.</span>
+                                <FileUp className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
+                                <span className="text-xs sm:text-sm font-medium truncate max-w-[120px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px]">
+                                  {file.name}
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => handleRemoveFile(index)}
+                              className="text-destructive hover:text-destructive/80 transition-colors ml-2 flex-shrink-0"
+                            >
+                              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                            </button>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           )}
 
           {/* Error Message */}
