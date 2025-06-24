@@ -10,6 +10,7 @@ import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
 import Profile from "./components/Profile";
 import PDF from "./pages/PDF";
+import PDFMerger from "./pages/PDFMerger";
 import WebDev from "./pages/WebDev";
 import Productivity from "./pages/Productivity";
 import TodoList from "./components/Todo";
@@ -38,6 +39,7 @@ const App = () => (
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Index />} />
                   <Route path="/pdf" element={<PDF />} />
+                  <Route path="/pdf-merger" element={<PDFMerger />} />
                   {/* <Route path="/pdf-converter" element={<PDFConverter />} /> */}
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/webdev" element={<WebDev />} />
