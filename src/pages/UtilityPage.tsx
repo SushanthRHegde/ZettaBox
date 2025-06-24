@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, Key, Ruler, QrCode } from 'lucide-react';
+import { Calculator, Key, Ruler, QrCode, FileUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const tools = [
@@ -30,6 +30,13 @@ const tools = [
     icon: QrCode,
     href: '/utility/qr-code',
     color: 'text-orange-500',
+  },
+  {
+    title: 'PDF Tools',
+    description: 'Merge multiple PDFs into one file or split a PDF into individual pages',
+    icon: FileUp,
+    href: '/utility/pdf-tools',
+    color: 'text-red-500',
   },
 ];
 
@@ -81,4 +88,4 @@ const UtilityPage = () => {
   );
 };
 
-export default UtilityPage; 
+export default UtilityPage;

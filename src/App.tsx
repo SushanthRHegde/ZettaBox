@@ -10,7 +10,7 @@ import PDFConverter from "./pages/PDFConverter";
 import NotFound from "./pages/NotFound";
 import Profile from "./components/Profile";
 import PDF from "./pages/PDF";
-import PDFMerger from "./pages/PDFMerger";
+import PDFMerger from "./pages/PDFMergerSplitter";
 import WebDev from "./pages/WebDev";
 import Productivity from "./pages/Productivity";
 import TodoList from "./components/Todo";
@@ -67,3 +67,4 @@ const App = () => (
 );
 
 export default App;
+;

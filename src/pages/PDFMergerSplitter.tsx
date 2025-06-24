@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, FileUp, FileDown, Check, AlertCircle, Trash2, Download, RefreshCw, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import PDFMergerLib from 'pdf-merger-js/browser';
+import { PDFDocument } from 'pdf-lib';
 import { useToast } from '@/hooks/use-toast';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -13,6 +14,10 @@ const PDFMerger: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [mergedPdfUrl, setMergedPdfUrl] = useState<string | null>(null);
+  const [splitPdfUrls, setSplitPdfUrls] = useState<string[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [startPage, setStartPage] = useState<string>('');
+  const [endPage, setEndPage] = useState<string>('');
 
   const resetState = () => {
     setFiles([]);
@@ -22,6 +27,12 @@ const PDFMerger: React.FC = () => {
       URL.revokeObjectURL(mergedPdfUrl);
       setMergedPdfUrl(null);
     }
+    // Clean up split PDF URLs
+    splitPdfUrls.forEach(url => URL.revokeObjectURL(url));
+    setSplitPdfUrls([]);
+    setTotalPages(0);
+    setStartPage('');
+    setEndPage('');
   };
 
   // Handle file upload
@@ -63,6 +74,82 @@ const PDFMerger: React.FC = () => {
     setFiles(items);
   };
 
+  // Update total pages when file changes
+  useEffect(() => {
+    const updateTotalPages = async () => {
+      if (files.length === 1 && mode === 'split') {
+        try {
+          const file = files[0];
+          const fileArrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await PDFDocument.load(fileArrayBuffer);
+          const pages = pdfDoc.getPageCount();
+          setTotalPages(pages);
+          setStartPage('1');
+          setEndPage(String(pages));
+        } catch (err) {
+          setError('Error reading PDF file');
+        }
+      } else {
+        setTotalPages(0);
+        setStartPage('');
+        setEndPage('');
+      }
+    };
+    updateTotalPages();
+  }, [files, mode]);
+
+  // Handle split operation
+  const handleSplit = async () => {
+    if (files.length !== 1) {
+      setError('Please upload exactly one PDF file to split');
+      return;
+    }
+
+    const start = parseInt(startPage);
+    const end = parseInt(endPage);
+
+    if (isNaN(start) || isNaN(end) || start < 1 || end > totalPages || start > end) {
+      setError(`Please enter valid page numbers between 1 and ${totalPages}`);
+      return;
+    }
+
+    setProcessing(true);
+    setError(null);
+    
+    try {
+      const file = files[0];
+      const fileArrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(fileArrayBuffer);
+      const newPdfDoc = await PDFDocument.create();
+      
+      // Copy the selected range of pages
+      const pageIndexes = Array.from(
+        { length: end - start + 1 },
+        (_, i) => start - 1 + i
+      );
+      const copiedPages = await newPdfDoc.copyPages(pdfDoc, pageIndexes);
+      copiedPages.forEach(page => newPdfDoc.addPage(page));
+      
+      const pdfBytes = await newPdfDoc.save();
+      const url = URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
+      setSplitPdfUrls([url]);
+      setSuccess(true);
+      toast({
+        title: 'Success',
+        description: `PDF pages ${start} to ${end} extracted successfully!`,
+      });
+    } catch (err) {
+      setError('An error occurred while splitting the file');
+      toast({
+        title: 'Error',
+        description: 'Failed to split PDF. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   // Handle merge operation
   const handleMerge = async () => {
     if (files.length < 2) {
@@ -100,7 +187,17 @@ const PDFMerger: React.FC = () => {
     }
   };
 
-  // Handle download
+  // Handle download split PDFs
+  const handleDownloadSplit = (url: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `split-pages-${startPage}-to-${endPage}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Handle download merged PDF
   const handleDownload = () => {
     if (mergedPdfUrl) {
       const link = document.createElement('a');
@@ -202,12 +299,14 @@ const PDFMerger: React.FC = () => {
                             className="flex items-center justify-between p-1.5 sm:p-2 md:p-3 bg-accent/50 rounded-lg group hover:bg-accent/70 transition-colors"
                           >
                             <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 flex-1 min-w-0">
-                              <div
-                                {...provided.dragHandleProps}
-                                className="p-0.5 sm:p-1 rounded hover:bg-accent/80 cursor-grab active:cursor-grabbing"
-                              >
-                                <GripVertical className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-muted-foreground" />
-                              </div>
+                              {mode === 'merge' && (
+                <div
+                  {...provided.dragHandleProps}
+                  className="p-0.5 sm:p-1 rounded hover:bg-accent/80 cursor-grab active:cursor-grabbing"
+                >
+                  <GripVertical className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-muted-foreground" />
+                </div>
+              )}
                               <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 min-w-0">
                                 <span className="text-xs sm:text-sm font-medium text-primary shrink-0">{index + 1}.</span>
                                 <FileUp className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
@@ -241,10 +340,85 @@ const PDFMerger: React.FC = () => {
             </div>
           )}
 
+          {/* Page Range Selection */}
+          {mode === 'split' && files.length === 1 && (
+            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center bg rounded-lg shadow-sm p-6">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center space-x-3">
+                  <label className="text-sm font-semibold text-foreground">From page:</label>
+                  <input
+                    type="number"
+                    value={startPage}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setStartPage('');
+                        return;
+                      }
+                      const num = parseInt(value);
+                      if (num >= 1 && num <= totalPages) {
+                        setStartPage(value);
+                        setError(null);
+                        // Adjust end page if it's less than start page
+                        const endNum = parseInt(endPage);
+                        if (endNum < num) {
+                          setEndPage(value);
+                        }
+                      }
+                    }}
+                    onBlur={() => {
+                      if (startPage === '') {
+                        setStartPage('1');
+                      }
+                    }}
+                    min={1}
+                    max={totalPages}
+                    className="w-24 px-4 py-2 border rounded-md text-sm bg-background/80 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                  />
+                </div>
+                <div className="flex items-center space-x-3">
+                  <label className="text-sm font-semibold text-foreground">To page:</label>
+                  <input
+                    type="number"
+                    value={endPage}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setEndPage('');
+                        return;
+                      }
+                      const num = parseInt(value);
+                      if (num >= 1 && num <= totalPages) {
+                        setEndPage(value);
+                        setError(null);
+                        // Adjust start page if it's greater than end page
+                        const startNum = parseInt(startPage);
+                        if (startNum > num) {
+                          setStartPage(value);
+                        }
+                      }
+                    }}
+                    onBlur={() => {
+                      if (endPage === '') {
+                        setEndPage(String(totalPages));
+                      }
+                    }}
+                    min={1}
+                    max={totalPages}
+                    className="w-24 px-4 py-2 border rounded-md text-sm bg-background/80 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                  />
+                </div>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total pages: {totalPages}
+              </div>
+            </div>
+          )}
+
           {/* Process Button */}
           <button
-            onClick={handleMerge}
-            disabled={processing || files.length < 2}
+            onClick={mode === 'merge' ? handleMerge : handleSplit}
+            disabled={processing || (mode === 'merge' ? files.length < 2 : files.length !== 1)}
             className={cn(
               'w-full py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-all transform',
               'bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[0.99]',
@@ -256,12 +430,12 @@ const PDFMerger: React.FC = () => {
             {processing ? (
               <>
                 <div className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span className="text-sm sm:text-base">Merging PDFs...</span>
+                <span className="text-sm sm:text-base">{mode === 'merge' ? 'Merging PDFs...' : 'Splitting PDF...'}</span>
               </>
             ) : (
               <>
                 <FileUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="text-sm sm:text-base">Merge PDF Files</span>
+                <span className="text-sm sm:text-base">{mode === 'merge' ? 'Merge PDF Files' : 'Split PDF File'}</span>
               </>
             )}
           </button>
@@ -269,25 +443,42 @@ const PDFMerger: React.FC = () => {
       )}
 
       {/* Success Message with Download and Reset */}
-      {success && mergedPdfUrl && (
+      {success && (mode === 'merge' ? mergedPdfUrl : splitPdfUrls.length > 0) && (
         <div className="flex flex-col space-y-3 sm:space-y-4 p-4 sm:p-6 bg-background rounded-lg border shadow-sm">
           <div className="flex items-center space-x-2 text-foreground">
             <Check className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-            <p className="text-sm sm:text-base font-medium">PDF files merged successfully!</p>
+            <p className="text-sm sm:text-base font-medium">
+              {mode === 'merge' ? 'PDF files merged successfully!' : 'PDF split successfully into individual pages!'}
+            </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <button
-              onClick={handleDownload}
-              className={cn(
-                'flex items-center justify-center space-x-2 py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg font-medium',
-                'bg-primary text-primary-foreground hover:bg-primary/90',
-                'transition-all duration-200 ease-in-out transform hover:scale-[0.98]',
-                'text-sm sm:text-base flex-1'
-              )}
-            >
-              <Download className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span>Download Merged PDF</span>
-            </button>
+          <div className="flex flex-col gap-2 sm:gap-3">
+            {mode === 'merge' ? (
+              <button
+                onClick={handleDownload}
+                className={cn(
+                  'flex items-center justify-center space-x-2 py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg font-medium',
+                  'bg-primary text-primary-foreground hover:bg-primary/90',
+                  'transition-all duration-200 ease-in-out transform hover:scale-[0.98]',
+                  'text-sm sm:text-base flex-1'
+                )}
+              >
+                <Download className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                <span>Download Merged PDF</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => handleDownloadSplit(splitPdfUrls[0])}
+                className={cn(
+                  'flex items-center justify-center space-x-2 py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg font-medium',
+                  'bg-primary text-primary-foreground hover:bg-primary/90',
+                  'transition-all duration-200 ease-in-out transform hover:scale-[0.98]',
+                  'text-sm sm:text-base w-full'
+                )}
+              >
+                <Download className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                <span>Download Selected Pages</span>
+              </button>
+            )}
             <button
               onClick={resetState}
               className={cn(
@@ -298,7 +489,7 @@ const PDFMerger: React.FC = () => {
               )}
             >
               <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span>Start New Merge</span>
+              <span>Start New {mode === 'merge' ? 'Merge' : 'Split'}</span>
             </button>
           </div>
         </div>
