@@ -60,7 +60,7 @@ const PDF: React.FC = () => {
       title: 'Compress PDF',
       description: 'Reduce file size while maintaining quality',
       icon: FilePlus,
-      href: '/pdf-compress',
+      href: '/pdf/compress',
     },
     {
       title: 'Secure PDF',

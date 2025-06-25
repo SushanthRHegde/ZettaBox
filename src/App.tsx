@@ -24,6 +24,7 @@ import PasswordGenerator from "./pages/utility/PasswordGenerator";
 import QRCode from "./pages/utility/QRCode";
 // import MobileNav from "./components/MobileNav";
 import FloatingDock from "./components/FloatingDock";
+import PDFCompress from "./pages/PDFCompress";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
                   <Route path="/pdf-merger" element={<PDFMerger />} />
                   <Route path="/pdf-editor" element={<PDFEditor />} />
                   <Route path="/pdf-converter" element={<PDFConverter />} />
+                  <Route path="/pdf/compress" element={<PDFCompress />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/webdev" element={<WebDev />} />
                   <Route path="/productivity" element={<Productivity />} />

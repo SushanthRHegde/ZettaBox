@@ -4,6 +4,7 @@ import PDF from '@/pages/PDF';
 import PDFEditor from '@/pages/PDFEditor';
 import PDFMergerSplitter from '@/pages/PDFMergerSplitter';
 import PDFConverter from '@/pages/PDFConverter';
+import PDFCompress from '@/pages/PDFCompress';
 import NotFound from '@/pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -24,9 +25,12 @@ export const router = createBrowserRouter([
         path: 'pdf-merger',
         element: <PDFMergerSplitter />,
       },
-      {
-        path: 'pdf-converter',
+      {        path: 'pdf-converter',
         element: <PDFConverter />,
+      },
+      {
+        path: 'pdf/compress',
+        element: <PDFCompress />,
       },
     ],
   },
