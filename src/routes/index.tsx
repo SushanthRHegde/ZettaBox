@@ -1,2 +1,33 @@
-// This file is no longer needed as routing is handled in App.tsx
-export {}; // Empty export to satisfy TypeScript
+import { createBrowserRouter } from 'react-router-dom';
+import MainLayout from '@/components/MainLayout';
+import PDF from '@/pages/PDF';
+import PDFEditor from '@/pages/PDFEditor';
+import PDFMergerSplitter from '@/pages/PDFMergerSplitter';
+import PDFConverter from '@/pages/PDFConverter';
+import NotFound from '@/pages/NotFound';
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MainLayout />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        path: 'pdf',
+        element: <PDF />,
+      },
+      {
+        path: 'pdf-editor',
+        element: <PDFEditor />,
+      },
+      {
+        path: 'pdf-merger',
+        element: <PDFMergerSplitter />,
+      },
+      {
+        path: 'pdf-converter',
+        element: <PDFConverter />,
+      },
+    ],
+  },
+]);

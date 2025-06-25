@@ -43,7 +43,7 @@ const PDF: React.FC = () => {
       description: 'Advanced PDF editing with AI-powered features',
       icon: FileSignature,
       href: '/pdf-editor',
-      isLocked: !currentUser,
+      isComingSoon: true,
     },
     {
       title: 'PDF Converter Pro',
@@ -212,4 +212,4 @@ const PDF: React.FC = () => {
   );
 };
 
-export default PDF; 
+export default PDF;
