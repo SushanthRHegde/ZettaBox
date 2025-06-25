@@ -210,7 +210,7 @@ const PDFMerger: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
+    <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6">
       <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4">
         <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center">PDF {mode === 'merge' ? 'Merger' : 'Splitter'}</h1>
         <p className="text-xs sm:text-sm md:text-base text-muted-foreground text-center max-w-md mx-auto px-2 sm:px-4">
@@ -342,10 +342,10 @@ const PDFMerger: React.FC = () => {
 
           {/* Page Range Selection */}
           {mode === 'split' && files.length === 1 && (
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center bg rounded-lg shadow-sm p-6">
-              <div className="flex items-center gap-6">
-                <div className="flex items-center space-x-3">
-                  <label className="text-sm font-semibold text-foreground">From page:</label>
+            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center bg rounded-lg shadow-sm p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
+                <div className="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                  <label className="text-sm font-semibold text-foreground whitespace-nowrap">From page:</label>
                   <input
                     type="number"
                     value={startPage}
@@ -376,8 +376,8 @@ const PDFMerger: React.FC = () => {
                     className="w-24 px-4 py-2 border rounded-md text-sm bg-background/80 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
                   />
                 </div>
-                <div className="flex items-center space-x-3">
-                  <label className="text-sm font-semibold text-foreground">To page:</label>
+                <div className="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                  <label className="text-sm font-semibold text-foreground whitespace-nowrap">To page:</label>
                   <input
                     type="number"
                     value={endPage}
@@ -409,7 +409,7 @@ const PDFMerger: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground text-center sm:text-left mt-2 sm:mt-0">
                 Total pages: {totalPages}
               </div>
             </div>
