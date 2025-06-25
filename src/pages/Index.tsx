@@ -48,6 +48,7 @@ const Index: React.FC = () => {
       description: 'Combine multiple PDFs into one document',
       icon: FileText,
       href: '/pdf-merger',
+      
     },
     {
       title: 'PDF Editor',

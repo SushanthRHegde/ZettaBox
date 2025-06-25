@@ -38,19 +38,20 @@ const PDF: React.FC = () => {
       icon: FileStack,
       href: '/pdf-merger',
     },
+
+    {
+      title: 'PDF Converter Pro',
+      description: 'Convert any document to and from PDF ',
+      icon: FileOutput,
+      href: '/pdf-converter',
+
+    },
     {
       title: 'Smart PDF Editor',
       description: 'Advanced PDF editing with AI-powered features',
       icon: FileSignature,
       href: '/pdf-editor',
       isComingSoon: true,
-    },
-    {
-      title: 'PDF Converter Pro',
-      description: 'Convert any document to and from PDF ',
-      icon: FileOutput,
-      href: '/pdf-converter',
-      isLocked: !currentUser,
     },
   ];
 

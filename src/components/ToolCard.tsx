@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface ToolCardProps {
   icon: LucideIcon;
@@ -32,8 +33,8 @@ const ToolCard: React.FC<ToolCardProps> = ({
   };
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       onClick={handleClick}
       className={cn(
         "relative flex flex-col rounded-lg border border-border p-5 transition-colors hover:bg-accent/50",
@@ -78,7 +79,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
           </div>
         </div>
       )}
-    </a>
+    </Link>
   );
 };
 

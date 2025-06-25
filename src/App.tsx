@@ -42,7 +42,7 @@ const App = () => (
                   <Route path="/pdf" element={<PDF />} />
                   <Route path="/pdf-merger" element={<PDFMerger />} />
                   <Route path="/pdf-editor" element={<PDFEditor />} />
-                  {/* <Route path="/pdf-converter" element={<PDFConverter />} /> */}
+                  <Route path="/pdf-converter" element={<PDFConverter />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/webdev" element={<WebDev />} />
                   <Route path="/productivity" element={<Productivity />} />
